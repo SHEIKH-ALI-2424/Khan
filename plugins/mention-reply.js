@@ -40,13 +40,13 @@ cmd({
           forwardingScore: 999,
           isForwarded: true,
           externalAdReply: {
-            title: config.BOT_NAME || "SHEIKH-ALI-MD 🥀",
-            body: config.DESCRIPTION || "© Pᴏᴡᴇʀᴇᴅ Bʏ 𒁂𓄂❥.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼࿐ ♡••²⁴⁰²💗",
+            title: config.BOT_NAME || "KHAN-MD 🥀",
+            body: config.DESCRIPTION || "POWERED BY JAWAD TECHX 🤌💗",
             mediaType: 1,
             renderLargerThumbnail: true,
             thumbnail: thumbnailBuffer,
-            mediaUrl: "https://i.imghippo.com/files/YZK6549KW.jpg", // Static image URL
-            sourceUrl: "https://wa.me/923143702270?text=*Hi%20𒁂𓄂❥𝕚𝕥𝕩.𝑺𝑯𝑬𝑰𝑲𝑯%20𝑨𝑳𝑰%20🔥༽༼%20♡𒁂",
+            mediaUrl: "https://files.catbox.moe/l2t3e0.jpg", // Static image URL
+            sourceUrl: "https://wa.me/message/INB2QVGXHQREO1",
             showAdAttribution: true
           }
         }

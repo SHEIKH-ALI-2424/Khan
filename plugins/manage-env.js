@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------
-//           SHEIKH-ALI-MD  
+//           KHAN-MD  
 //---------------------------------------------------------------------------
 //  ⚠️ DO NOT MODIFY THIS FILE ⚠️  
 //---------------------------------------------------------------------------
@@ -203,8 +203,8 @@ async (conn, mek, m, { from, args, isCreator, reply }) => {
 // AUTO_VIEW_STATUS COMMANDS
 //--------------------------------------------
 cmd({
-    pattern: "auto-status-seen",
-    alias: ["autostatusseen"],
+    pattern: "auto-seen",
+    alias: ["autostatusview"],
     desc: "Enable or disable auto-viewing of statuses",
     category: "settings",
     filename: __filename

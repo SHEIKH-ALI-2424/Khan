@@ -119,8 +119,8 @@ ${config.DESCRIPTION}`;
                 forwardingScore: 999,
                 isForwarded: true,
                 forwardedNewsletterMessageInfo: {
-                    newsletterJid: '120363333032882285@newsletter',
-                    newsletterName: config.OWNER_NAME || '𒁂𓄂❥𝕚𝕥𝕩.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼ ♡𒁂',
+                    newsletterJid: '120363354023106228@newsletter',
+                    newsletterName: config.OWNER_NAME || 'JawadTechX',
                     serverMessageId: 143
                 }
             }

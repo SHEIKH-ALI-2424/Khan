@@ -3,7 +3,7 @@ const config = require('../config')
 const { cmd, commands } = require('../command')
 
 
-// Sheikh Ali 
+// JawadTechX
 
 cmd({
     pattern: "leave",
