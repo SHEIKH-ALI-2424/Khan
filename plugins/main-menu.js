@@ -1,124 +1,125 @@
+const config = require('../config');
 const { cmd } = require('../command');
+const os = require("os");
 const { runtime } = require('../lib/functions');
-const os = require('os');
 
-// 📋 Main Menu Command
 cmd({
   pattern: "menu",
-  desc: "Queen Anita style main menu",
-  category: "main",
-  react: "📜"
-}, async (conn, m) => {
-  const pushname = m.pushName || 'User';
-  const from = m.chat;
+  alias: ["sheikh"],
+  desc: "menu the bot",
+  react: "📜",
+  category: "main"
+},
+async (conn, mek, m, { from, pushname, reply }) => {
+  try {
+    const caption = `*👋 Hello ${pushname}*
 
-  const caption = `*👋 Hello ${pushname}*
+*꧁ྀི*𝐒𝐇𝐄𝐈𝐊𝐇 𝐀𝐋𝐈 𝐌𝐃*ྀི꧂*
+> *ʀᴜɴᴛɪᴍᴇ* : ${runtime(process.uptime())}
+> *ʀᴀᴍ ᴜsᴇ* : ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}MB / ${Math.round(os.totalmem() / 1024 / 1024)}MB
+> *ᴄʀᴇᴀᴛᴏʀ* : 𓄂𝕚𝕥𝕩.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥
+> *ᴠᴇʀsɪᴏɴ* : v4.0 Beta
 
-*꧁ 𝐒𝐇𝐄𝐈𝐊𝐇 𝐀𝐋𝐈 𝐌𝐃 ꧂*
-> *Runtime:* ${runtime(process.uptime())}
-> *RAM:* ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}MB / ${Math.round(os.totalmem() / 1024 / 1024)}MB
-> *Version:* v4.0 Beta
-> *Creator:* 𓄂 𝕚𝕥𝕩.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥
+*╭─➤ Choose Menu Below:*
+*├➤ 1 • Download*
+*├➤ 2 • AI*
+*├➤ 3 • Anime*
+*├➤ 4 • Convert*
+*├➤ 5 • Fun*
+*├➤ 6 • Main*
+*├➤ 7 • Group*
+*├➤ 8 • Owner*
+*├➤ 9 • Other*
+*├➤ 10 • Reactions*
+*├➤ 11 • Scammer*
+*├➤ 12 • Logo*
+*╰─➤ Reply number or tap button below*
 
-*╭────══[ MENU ]══────╮*
-*│ 1 • Download*
-*│ 2 • AI*
-*│ 3 • Anime*
-*│ 4 • Convert*
-*│ 5 • Fun*
-*│ 6 • Main*
-*│ 7 • Group*
-*│ 8 • Owner*
-*│ 9 • Other*
-*│ 10 • Reactions*
-*│ 11 • Scammer*
-*│ 12 • Logo*
-*╰────═ Tap MENU below or reply with number*`;
+> *© Powered by 𒁂❥ SHEIKH ALI 🔥*`;
 
-  await conn.sendMessage(from, {
-    image: { url: "https://i.ibb.co/YdSKMhv/6767.jpg" },
-    caption,
-    buttons: [
-      { buttonId: 'menu_list', buttonText: { displayText: "📋 MENU" }, type: 1 }
-    ],
-    headerType: 4
-  }, { quoted: m });
+    const imageMessage = await conn.sendMessage(from, {
+      image: { url: "https://i.ibb.co/YdSKMhv/6767.jpg" },
+      caption,
+      buttons: [
+        { buttonId: '.openmenu', buttonText: { displayText: '📝 Open Menu List' }, type: 1 }
+      ],
+      headerType: 4
+    }, { quoted: mek });
+
+    // Button command for opening list
+    cmd({ pattern: "openmenu", hidden: true }, async (conn, mek2) => {
+      await conn.sendMessage(from, {
+        text: caption,
+        buttonText: '📝 Open Menu List',
+        sections: [{
+          title: "📋 SELECT A MENU",
+          rows: [
+            { title: "📥 Download Menu", rowId: "menu1" },
+            { title: "🤖 AI Menu", rowId: "menu2" },
+            { title: "👘 Anime Menu", rowId: "menu3" },
+            { title: "🛠️ Convert Menu", rowId: "menu4" },
+            { title: "🎉 Fun Menu", rowId: "menu5" },
+            { title: "🧾 Main Menu", rowId: "menu6" },
+            { title: "👥 Group Menu", rowId: "menu7" },
+            { title: "🛡️ Owner Menu", rowId: "menu8" },
+            { title: "📂 Other Menu", rowId: "menu9" },
+            { title: "💬 Reactions", rowId: "menu10" },
+            { title: "❌ Scammer Menu", rowId: "menu11" },
+            { title: "🎨 Logo Menu", rowId: "menu12" }
+          ]
+        }]
+      }, { quoted: mek2 });
+    });
+
+    // Listen to both list reply AND number reply
+    conn.ev.on('messages.upsert', async (msgUpdate) => {
+      const msg = msgUpdate.messages[0];
+      if (!msg.message) return;
+
+      let selected;
+      if (msg.message.listResponseMessage) {
+        selected = msg.message.listResponseMessage.singleSelectReply.selectedRowId;
+      } else if (msg.message.extendedTextMessage?.contextInfo?.stanzaId === imageMessage.key.id) {
+        selected = msg.message.extendedTextMessage.text.trim();
+      } else return;
+
+      const menus = {
+        "1": "*📥 Download Menu*\nfacebook\nytmp3\napk\n...",
+        "2": "*🤖 AI Menu*\nai\ngpt4\nbing\n...",
+        "3": "*👘 Anime Menu*\nwaifu\nneko\nanime1\n...",
+        "4": "*🛠️ Convert Menu*\nsticker\ntomp3\ntrt\n...",
+        "5": "*🎉 Fun Menu*\nrate\njoke\nkiss\n...",
+        "6": "*🧾 Main Menu*\nping\nalive\nmenu\n...",
+        "7": "*👥 Group Menu*\nkick\npromote\nwelcome\n...",
+        "8": "*🛡️ Owner Menu*\nblock\nunblock\nsetpp\n...",
+        "9": "*📂 Other Menu*\nwikipedia\ntimenow\nweather\n...",
+        "10": "*💬 Reactions*\nhug\ncry\nslap\n...",
+        "11": "*❌ Scammer Menu*\nReport these numbers:\n...",
+        "12": "*🎨 Logo Menu*\nneonlight\nsadgirl\ngalaxy\n...",
+        "menu1": "*📥 Download Menu*\nfacebook\nytmp3\napk\n...",
+        "menu2": "*🤖 AI Menu*\nai\ngpt4\nbing\n...",
+        "menu3": "*👘 Anime Menu*\nwaifu\nneko\nanime1\n...",
+        "menu4": "*🛠️ Convert Menu*\nsticker\ntomp3\ntrt\n...",
+        "menu5": "*🎉 Fun Menu*\nrate\njoke\nkiss\n...",
+        "menu6": "*🧾 Main Menu*\nping\nalive\nmenu\n...",
+        "menu7": "*👥 Group Menu*\nkick\npromote\nwelcome\n...",
+        "menu8": "*🛡️ Owner Menu*\nblock\nunblock\nsetpp\n...",
+        "menu9": "*📂 Other Menu*\nwikipedia\ntimenow\nweather\n...",
+        "menu10": "*💬 Reactions*\nhug\ncry\nslap\n...",
+        "menu11": "*❌ Scammer Menu*\nReport these numbers:\n...",
+        "menu12": "*🎨 Logo Menu*\nneonlight\nsadgirl\ngalaxy\n..."
+      };
+
+      if (menus[selected]) {
+        await conn.sendMessage(from, { text: menus[selected] }, { quoted: msg.key });
+      } else {
+        await conn.sendMessage(from, { text: "❌ Invalid selection." }, { quoted: msg.key });
+      }
+    });
+
+  } catch (e) {
+    console.error(e);
+    await conn.sendMessage(from, { react: { text: '❌', key: mek.key } });
+    reply('An error occurred while processing your request.');
+  }
 });
-
-// 📂 List Trigger Command (opens the list message)
-cmd({
-  pattern: "menu_list",
-  hidden: true
-}, async (conn, m) => {
-  await conn.sendMessage(m.chat, {
-    text: "*✨ Select a menu below:*",
-    buttonText: "📋 SELECT MENU",
-    sections: [{
-      title: "📚 SHEIKH ALI MENU",
-      rows: [
-        { title: "📥 Download Menu", rowId: "menu1" },
-        { title: "🤖 AI Menu", rowId: "menu2" },
-        { title: "🖼️ Anime Menu", rowId: "menu3" },
-        { title: "🔁 Convert Menu", rowId: "menu4" },
-        { title: "🎮 Fun Menu", rowId: "menu5" },
-        { title: "🏠 Main Menu", rowId: "menu6" },
-        { title: "👥 Group Menu", rowId: "menu7" },
-        { title: "👑 Owner Menu", rowId: "menu8" },
-        { title: "🛠 Other Menu", rowId: "menu9" },
-        { title: "❤️ Reactions", rowId: "menu10" },
-        { title: "🚨 Scammer Menu", rowId: "menu11" },
-        { title: "🖋 Logo Menu", rowId: "menu12" }
-      ]
-    }]
-  }, { quoted: m });
-});
-
-// 🧩 All 12 Submenu Handlers (cmd-based)
-
-cmd({ pattern: "menu1", hidden: true }, async (conn, m) =>
-  await conn.sendMessage(m.chat, { text: "*📥 Download Menu*\n• facebook\n• ytmp3\n• apk" }, { quoted: m })
-);
-
-cmd({ pattern: "menu2", hidden: true }, async (conn, m) =>
-  await conn.sendMessage(m.chat, { text: "*🤖 AI Menu*\n• gpt4\n• meta\n• ai" }, { quoted: m })
-);
-
-cmd({ pattern: "menu3", hidden: true }, async (conn, m) =>
-  await conn.sendMessage(m.chat, { text: "*🖼️ Anime Menu*\n• waifu\n• neko\n• animegirl" }, { quoted: m })
-);
-
-cmd({ pattern: "menu4", hidden: true }, async (conn, m) =>
-  await conn.sendMessage(m.chat, { text: "*🔁 Convert Menu*\n• sticker\n• tomp3\n• base64" }, { quoted: m })
-);
-
-cmd({ pattern: "menu5", hidden: true }, async (conn, m) =>
-  await conn.sendMessage(m.chat, { text: "*🎮 Fun Menu*\n• joke\n• hug\n• ship" }, { quoted: m })
-);
-
-cmd({ pattern: "menu6", hidden: true }, async (conn, m) =>
-  await conn.sendMessage(m.chat, { text: "*🏠 Main Menu*\n• ping\n• alive\n• help" }, { quoted: m })
-);
-
-cmd({ pattern: "menu7", hidden: true }, async (conn, m) =>
-  await conn.sendMessage(m.chat, { text: "*👥 Group Menu*\n• add\n• kick\n• promote" }, { quoted: m })
-);
-
-cmd({ pattern: "menu8", hidden: true }, async (conn, m) =>
-  await conn.sendMessage(m.chat, { text: "*👑 Owner Menu*\n• block\n• unblock\n• setpp" }, { quoted: m })
-);
-
-cmd({ pattern: "menu9", hidden: true }, async (conn, m) =>
-  await conn.sendMessage(m.chat, { text: "*🛠 Other Menu*\n• weather\n• timer\n• calc" }, { quoted: m })
-);
-
-cmd({ pattern: "menu10", hidden: true }, async (conn, m) =>
-  await conn.sendMessage(m.chat, { text: "*❤️ Reactions*\n• hug\n• slap\n• kiss" }, { quoted: m })
-);
-
-cmd({ pattern: "menu11", hidden: true }, async (conn, m) =>
-  await conn.sendMessage(m.chat, { text: "*🚨 Scammer Menu*\nReport fake numbers:" }, { quoted: m })
-);
-
-cmd({ pattern: "menu12", hidden: true }, async (conn, m) =>
-  await conn.sendMessage(m.chat, { text: "*🖋 Logo Menu*\n• neonlight\n• galaxy\n• sadgirl" }, { quoted: m })
-);
