@@ -1,4 +1,4 @@
-name: sheikh-ali-md
+name: khan-md
 services:
   - name: khan-md-service
     type: web
