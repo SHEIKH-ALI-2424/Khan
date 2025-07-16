@@ -1,454 +1,124 @@
-const config = require('../config')
-const {cmd , commands} = require('../command')
-const os = require("os")
-const {runtime} = require('../lib/functions')
+const { cmd } = require('../command');
+const { runtime } = require('../lib/functions');
+const os = require('os');
+
+// 📋 Main Menu Command
 cmd({
-    pattern: "menu",
-    alias: ["sheikh"],
-    desc: "menu the bot",
-    react: "📜",
-    category: "main"
-},
-async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply }) => {
-    try {
-        let desc = `*👋 Hello ${pushname}*
-    
-     *꧁ྀི*𝐒𝐇𝐄𝐈𝐊𝐇 𝐀𝐋𝐈 𝐌𝐃*ྀི꧂*
-*❖╭─────────────···▸*
-> *ʀᴜɴᴛɪᴍᴇ* : ${runtime(process.uptime())}
-> *ʀᴀᴍ ᴜsᴇ* : ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}MB / ${Math.round(require('os').totalmem / 1024 / 1024)}MB
-> *ɴᴀᴍᴇ ʙᴏᴛ* : *𝐒𝐇𝐄𝐈𝐊𝐇 𝐀𝐋𝐈 𝐌𝐃*
-> *ᴄʀᴇᴀᴛᴏʀ* : *𓄂𝕚𝕥𝕩.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼ ♡*
-> *ᴠᴇʀsɪᴏɴ* : *ᴠ.4.0* ʙᴇᴛᴀ
-*❖╰────────────···▸▸*
-*♡︎•━━━━━━☻︎━━━━━━•♡︎*
-*╭╼╼╼╼╼╼╼╼╼╼*
-*├➤ 1 • ᴅᴏᴡɴʟᴏᴀᴅ ᴍᴇɴᴜ
-*├➤ 2 • ᴀɪ ᴍᴇɴᴜ
-*├➤ 3 • ᴀɴɪᴍᴇ ᴍᴇɴᴜ
-*├➤ 4 • ᴄᴏɴᴠᴇʀᴛ ᴍᴇɴᴜ
-*├➤ 5 • ғᴜɴ ᴍᴇɴᴜ
-*├➤ 6 • ᴍᴀɪɴ ᴍᴇɴᴜ
-*├➤ 7 • ɢʀᴏᴜᴘ ᴍᴇɴᴜ
-*├➤ 8 • ᴏᴡɴᴇʀ ᴍᴇɴᴜ
-*├➤ 9 • ᴏᴛʜᴇʀ ᴍᴇɴᴜ
-*├➤ 10 • ʀᴇᴀᴄᴛɪᴏɴs
-*├➤ 11 • sᴄᴀᴍᴍᴇʀ
-*├➤ 12 • ʟᴏɢᴏ ᴍᴇɴᴜ 
-*╰╼╼╼╼╼╼╼╼╼╼*
-* ▣▣▣▣▣▣▣▣▣▣▣▣*⁠⁠⁠⁠
+  pattern: "menu",
+  desc: "Queen Anita style main menu",
+  category: "main",
+  react: "📜"
+}, async (conn, m) => {
+  const pushname = m.pushName || 'User';
+  const from = m.chat;
 
-*ׂ╰┈➤ 🔢Reply with the Number you want to select
+  const caption = `*👋 Hello ${pushname}*
 
-> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𒁂𓄂❥.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼࿐ ♡••²⁴⁰²*`;
+*꧁ 𝐒𝐇𝐄𝐈𝐊𝐇 𝐀𝐋𝐈 𝐌𝐃 ꧂*
+> *Runtime:* ${runtime(process.uptime())}
+> *RAM:* ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}MB / ${Math.round(os.totalmem() / 1024 / 1024)}MB
+> *Version:* v4.0 Beta
+> *Creator:* 𓄂 𝕚𝕥𝕩.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥
 
-        const vv = await conn.sendMessage(from, { image: { url: "https://i.ibb.co/YdSKMhv/6767.jpg"}, caption: desc }, { quoted: mek });
+*╭────══[ MENU ]══────╮*
+*│ 1 • Download*
+*│ 2 • AI*
+*│ 3 • Anime*
+*│ 4 • Convert*
+*│ 5 • Fun*
+*│ 6 • Main*
+*│ 7 • Group*
+*│ 8 • Owner*
+*│ 9 • Other*
+*│ 10 • Reactions*
+*│ 11 • Scammer*
+*│ 12 • Logo*
+*╰────═ Tap MENU below or reply with number*`;
 
-        conn.ev.on('messages.upsert', async (msgUpdate) => {
-            const msg = msgUpdate.messages[0];
-            if (!msg.message || !msg.message.extendedTextMessage) return;
-
-            const selectedOption = msg.message.extendedTextMessage.text.trim();
-
-            if (msg.message.extendedTextMessage.contextInfo && msg.message.extendedTextMessage.contextInfo.stanzaId === vv.key.id) {
-                switch (selectedOption) {
-                    case '1':
-                        reply(`*꧁◈╾───☉ ᴅᴏᴡɴʟᴏᴀᴅ ᴍᴇɴᴜ ☉───╼◈꧂*
-
-╭────────●●►
-┃◈┃• 🟦 facebook
-┃◈┃• 📁 mediafire
-┃◈┃• 🎵 tiktok
-┃◈┃• 🐦 twitter
-┃◈┃• 📷 insta
-┃◈┃• 📦 apk
-┃◈┃• 🖼️ img
-┃◈┃• ▶️ tt2
-┃◈┃• 📌 pins
-┃◈┃• 🔄 apk2
-┃◈┃• 🔵 fb2
-┃◈┃• 📍 pinterest
-┃◈┃• 🎶 spotify
-┃◈┃• 🎧 play
-┃◈┃• 🎧 play2
-┃◈┃• 🎧 play3
-┃◈┃• 🔉 audio
-┃◈┃• 🎬 video
-┃◈┃• 📹 video2
-┃◈┃• 📹 video3
-┃◈┃• 🎵 ytmp3
-┃◈┃• 📹 ytmp4
-┃◈┃• 🎶 song
-┃◈┃• 🎬 darama
-┃◈┃• ☁️ gdrive
-┃◈┃• 🌐 ssweb
-┃◈┃• 🎵 tiks
-╰────────────────────●●►
-
-
-> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𒁂𓄂❥.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼࿐ ♡••²⁴⁰²*`);
-                        break;
-                    case '2':               
-                        reply(`*꧁◈╾───☉ ᴀɪ ᴍᴇɴᴜ ☉───╼◈꧂*
-
-╭────────●●►
-┃◈┃• 🧠 ai
-┃◈┃• 🤖 gpt3
-┃◈┃• 🤖 gpt2
-┃◈┃• 🤖 gptmini
-┃◈┃• 🤖 gpt
-┃◈┃• 🔵 meta
-┃◈┃• 📦 blackbox
-┃◈┃• 🌈 luma
-┃◈┃• 🎧 dj
-┃◈┃• 👑 sheikh
-┃◈┃• 🤵 ali
-┃◈┃• 🧠 gpt4
-┃◈┃• 🔍 bing
-┃◈┃• 🎨 imagine
-┃◈┃• 🖼️ imagine2
-┃◈┃• 🤖 copilot
-╰────────────────────●●►
-
-
-> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𒁂𓄂❥.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼࿐ ♡••²⁴⁰²*`);
-                        break;
-                    case '3':               
-                        reply(`*꧁◈╾───☉ ᴀɴɪᴍᴇ ᴍᴇɴᴜ ☉───╼◈꧂*
-
-╭────────●●►
-┃◈┃• 🤬 fack
-┃◈┃• ✅ truth
-┃◈┃• 😨 dare
-┃◈┃• 🐶 dog
-┃◈┃• 🐺 awoo
-┃◈┃• 👧 garl
-┃◈┃• 👰 waifu
-┃◈┃• 🐱 neko
-┃◈┃• 🧙 megnumin
-┃◈┃• 🐱 neko
-┃◈┃• 👗 maid
-┃◈┃• 👧 loli
-┃◈┃• 🎎 animegirl
-┃◈┃• 🎎 animegirl1
-┃◈┃• 🎎 animegirl2
-┃◈┃• 🎎 animegirl3
-┃◈┃• 🎎 animegirl4
-┃◈┃• 🎎 animegirl5
-┃◈┃• 🎬 anime1
-┃◈┃• 🎬 anime2
-┃◈┃• 🎬 anime3
-┃◈┃• 🎬 anime4
-┃◈┃• 🎬 anime5
-┃◈┃• 📰 animenews
-┃◈┃• 🦊 foxgirl
-┃◈┃• 🍥 naruto
-╰────────────────────●●►
-
-
-> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𒁂𓄂❥.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼࿐ ♡••²⁴⁰²*`);
-                        break;
-                    case '4':               
-                        reply(`*꧁◈╾───☉ ᴄᴏɴᴠᴇʀᴛ ᴍᴇɴᴜ ☉───╼◈꧂*
-
-╭────────●●►
-┃◈┃• 🏷️ sticker
-┃◈┃• 🏷️ sticker2
-┃◈┃• 😀 emojimix
-┃◈┃• ✨ fancy
-┃◈┃• 🖼️ take
-┃◈┃• 🎵 tomp3
-┃◈┃• 🗣️ tts
-┃◈┃• 🌐 trt
-┃◈┃• 🔢 base64
-┃◈┃• 🔠 unbase64
-┃◈┃• 010 binary
-┃◈┃• 🔤 dbinary
-┃◈┃• 🔗 tinyurl
-┃◈┃• 🌐 urldecode
-┃◈┃• 🌐 urlencode
-┃◈┃• 🌐 url
-┃◈┃• 🔁 repeat
-┃◈┃• ❓ ask
-┃◈┃• 📖 readmore
-╰────────────────────●●►
-
-
-> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𒁂𓄂❥.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼࿐ ♡••²⁴⁰²*`);
-                        break;
-                    case '5':               
-                        reply(`*꧁◈╾───☉ ғᴜɴ ᴍᴇɴᴜ ☉───╼◈꧂*
-
-╭────────●●►
-┃◈┃• 🤪 shapar
-┃◈┃• ⭐ rate
-┃◈┃• 🤬 insult
-┃◈┃• 💻 hack
-┃◈┃• 💘 ship
-┃◈┃• 🎭 character
-┃◈┃• 💌 pickup
-┃◈┃• 😆 joke
-┃◈┃• ❤️ hrt
-┃◈┃• 😊 hpy
-┃◈┃• 😔 syd
-┃◈┃• 😠 anger
-┃◈┃• 😳 shy
-┃◈┃• 💋 kiss
-┃◈┃• 🧐 mon
-┃◈┃• 😕 cunfuzed
-┃◈┃• 🖼️ setpp
-┃◈┃• ✋ hand
-┃◈┃• 🏃 nikal
-┃◈┃• 🤲 hold
-┃◈┃• 🤗 hug
-┃◈┃• 🏃 nikal
-┃◈┃• 🎵 hifi
-┃◈┃• 👉 poke
-╰────────────────────●●►
-
-
-> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𒁂𓄂❥.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼࿐ ♡••²⁴⁰²*`);
-                        break;
-                    case '6':               
-                        reply(`*꧁◈╾───☉ ᴍᴀɪɴ  ᴍᴇɴᴜ ☉───╼◈꧂*
-
-╭────────●●►
-┃◈┃• 🏓 ping
-┃◈┃• 🏓 ping2
-┃◈┃• 🚀 speed
-┃◈┃• 📡 live
-┃◈┃• 💚 alive
-┃◈┃• ⏱️ runtime
-┃◈┃• ⏳ uptime
-┃◈┃• 📦 repo
-┃◈┃• 👑 owner
-┃◈┃• 📜 menu
-┃◈┃• 📜 menu2
-┃◈┃• 🔄 restart
-╰────────────────────●●►
-
-
-> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𒁂𓄂❥.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼࿐ ♡••²⁴⁰²*`);
-                        break;
-                    case '7':               
-                        reply(`*꧁◈╾───☉ ɢʀᴏᴜᴘ  ᴍᴇɴᴜ ☉───╼◈꧂*
-
-╭────────●●►
-┃◈┃• 🔗 grouplink
-┃◈┃• 🚪 kickall
-┃◈┃• 🚷 kickall2
-┃◈┃• 🚫 kickall3
-┃◈┃• ➕ add
-┃◈┃• ➖ remove
-┃◈┃• 👢 kick
-┃◈┃• ⬆️ promote
-┃◈┃• ⬇️ demote
-┃◈┃• 🚮 dismiss
-┃◈┃• 🔄 revoke
-┃◈┃• 👋 setgoodbye
-┃◈┃• 🎉 setwelcome
-┃◈┃• 🗑️ delete
-┃◈┃• 🖼️ getpic
-┃◈┃• ℹ️ ginfo
-┃◈┃• ⏳ disappear on
-┃◈┃• ⏳ disappear off
-┃◈┃• ⏳ disappear 7D,24H
-┃◈┃• 📝 allreq
-┃◈┃• ✏️ updategname
-┃◈┃• 📝 updategdesc
-┃◈┃• 📩 joinrequests
-┃◈┃• 📨 senddm
-┃◈┃• 🏃 nikal
-┃◈┃• 🔇 mute
-┃◈┃• 🔊 unmute
-┃◈┃• 🔒 lockgc
-┃◈┃• 🔓 unlockgc
-┃◈┃• 📩 invite
-┃◈┃• #️⃣ tag
-┃◈┃• 🏷️ hidetag
-┃◈┃• @️⃣ tagall
-┃◈┃• 👔 tagadmins
-╰────────────────────●●►
-
-
-> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𒁂𓄂❥.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼࿐ ♡••²⁴⁰²*`);
-                       break;
-                    case '8':               
-                        reply(`*꧁◈╾───☉ ᴏᴡɴᴇʀ ᴍᴇɴᴜ ☉───╼◈꧂*
-
-╭────────●●►
-┃◈┃• 👑 owner
-┃◈┃• 📜 menu
-┃◈┃• 📜 menu2
-┃◈┃• 📊 vv
-┃◈┃• 📋 listcmd
-┃◈┃• 📚 allmenu
-┃◈┃• 📦 repo
-┃◈┃• 🚫 block
-┃◈┃• ✅ unblock
-┃◈┃• 🖼️ fullpp
-┃◈┃• 🖼️ setpp
-┃◈┃• 🔄 restart
-┃◈┃• ⏹️ shutdown
-┃◈┃• 🔄 updatecmd
-┃◈┃• 💚 alive
-┃◈┃• 🏓 ping
-┃◈┃• 🆔 gjid
-┃◈┃• 🆔 jid
-╰────────────────────●●►
-
-
-> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𒁂𓄂❥.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼࿐ ♡••²⁴⁰²*`);
-                        break;
-                    case '9':               
-                        reply(`*꧁◈╾───☉ ᴏᴛʜᴇʀ ᴍᴇɴᴜ ☉───╼◈꧂*
-                        
-╭────────●●►
-┃◈┃• 🕒 timenow
-┃◈┃• 📅 date
-┃◈┃• 🔢 count
-┃◈┃• 🧮 calculate
-┃◈┃• 🔢 countx
-┃◈┃• 🎲 flip
-┃◈┃• 🪙 coinflip
-┃◈┃• 🎨 rcolor
-┃◈┃• 🎲 roll
-┃◈┃• ℹ️ fact
-┃◈┃• 💻 cpp
-┃◈┃• 🎲 rw
-┃◈┃• 💑 pair
-┃◈┃• 💑 pair2
-┃◈┃• 💑 pair3
-┃◈┃• ✨ fancy
-┃◈┃• 🎨 logo <text>
-┃◈┃• 📖 define
-┃◈┃• 📰 news
-┃◈┃• 🎬 movie
-┃◈┃• ☀️ weather
-┃◈┃• 📦 srepo
-┃◈┃• 🤬 insult
-┃◈┃• 💾 save
-┃◈┃• 🌐 wikipedia
-┃◈┃• 🔑 gpass
-┃◈┃• 👤 githubstalk
-┃◈┃• 🔍 yts
-┃◈┃• 📹 ytv
-╰────────────────────●●►
-
-
-> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𒁂𓄂❥.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼࿐ ♡••²⁴⁰²*`);
-                        break;
-                    case '10':               
-                        reply(`*꧁◈╾───☉ ʀᴇᴀᴄᴛɪᴏɴs ᴍᴇɴᴜ ☉───╼◈꧂*
-                        
-╭────────●●►
-┃◈┃• 👊 bully @tag
-┃◈┃• 🤗 cuddle @tag
-┃◈┃• 😢 cry @tag
-┃◈┃• 🤗 hug @tag
-┃◈┃• 🐺 awoo @tag
-┃◈┃• 💋 kiss @tag
-┃◈┃• 👅 lick @tag
-┃◈┃• 🖐️ pat @tag
-┃◈┃• 😏 smug @tag
-┃◈┃• 🔨 bonk @tag
-┃◈┃• 🚀 yeet @tag
-┃◈┃• 😊 blush @tag
-┃◈┃• 😄 smile @tag
-┃◈┃• 👋 wave @tag
-┃◈┃• ✋ highfive @tag
-┃◈┃• 🤝 handhold @tag
-┃◈┃• 🍜 nom @tag
-┃◈┃• 🦷 bite @tag
-┃◈┃• 🤗 glomp @tag
-┃◈┃• 👋 slap @tag
-┃◈┃• 💀 kill @tag
-┃◈┃• 😊 happy @tag
-┃◈┃• 😉 wink @tag
-┃◈┃• 👉 poke @tag
-┃◈┃• 💃 dance @tag
-┃◈┃• 😬 cringe @tag
-╰────────────────────●●►
-
-
-> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𒁂𓄂❥.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼࿐ ♡••²⁴⁰²*`);
-                        break;
-                    case '11':               
-                        reply(`*꧁◈╾───☉ sᴄᴀᴍᴍᴇʀ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ☉───╼◈꧂*
-                        
-╭────────●●►
-┃★│ • BC tatta 1🖕🏻: https://api.whatsapp.com/send?phone=923181093514&text=Hi+Randi+Ki+Olad+UK+UMAIR+LOL🖕🏻
-┃★│ • BC tatta 2🖕🏻: https://api.whatsapp.com/send?phone=923094230218&text=Hi+Randi+Ki+Olad+UK+UMAIR+LOL🖕🏻
-┃★│ • BC tatta 3🖕🏻: https://api.whatsapp.com/send?phone=447715929714&text=Hi+Randi+Ki+Olad+UK+UMAIR+LOL🖕🏻
-┃★│ • BC tatta 4🖕🏻: https://api.whatsapp.com/send?phone=923092342318&text=Hi+Randi+Ki+Olad+UK+UMAIR+LOL🖕🏻
-┃★│ • BC tatta 5🖕🏻: https://api.whatsapp.com/send?phone=923304093758&text=Hi+Randi+Ki+Olad+UK+UMAIR+LOL🖕🏻
-┃★│ • BC tatta 6🖕🏻: https://api.whatsapp.com/send?phone=923202231275&text=Hi+Randi+Ki+Olad+UK+UMAIR+LOL🖕🏻
-┃★│ • BC tatta 7🖕🏻: https://api.whatsapp.com/send?phone=923134885399&text=hi+bc+scammer🖕🏻
-┃★│ • BC gashti 1🖕🏻: https://api.whatsapp.com/send?phone=923299539369&text=hi+bc+scammer🖕🏻
-╰────────────────────●●►
-
-*꧁◈╾───☉ ɪᴍᴘᴏʀᴛᴀɴᴛ ᴍᴇssᴀɢᴇ ☉───╼◈꧂*
-╭────────●●►
-┃★│ • Please report to all these scammers's numbers.
-┃★│ • If you have more scammers's number so contact me. I will add in my bot.
-┃★│ • Owner: https://api.whatsapp.com/send?phone=923143702270&text=Hello+𓄂.𝑺𝑯𝑬𝑰𝑲𝑯+𝑨𝑳𝑰+🔥༽༼+♡+I+have+scammer's+number.+Please+add+his/her+number+in+your+bot🥰.
-╰────────────────────●●►
-
-
-> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𒁂𓄂❥.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼࿐ ♡••²⁴⁰²*`);
-                        break;
-                    case '12':               
-                        reply(`*꧁◈╾───☉ ʟᴏɢᴏ ᴍᴇɴᴜ ☉───╼◈꧂*
-                        
-╭────────●●►
-┃◈┃• 💡 neonlight
-┃◈┃• 🎀 blackpink
-┃◈┃• 🐉 dragonball
-┃◈┃• 🎭 3dcomic
-┃◈┃• 🇺🇸 america
-┃◈┃• 🍥 naruto
-┃◈┃• 😢 sadgirl
-┃◈┃• ☁️ clouds
-┃◈┃• 🚀 futuristic
-┃◈┃• 📜 3dpaper
-┃◈┃• ✏️ eraser
-┃◈┃• 🌇 sunset
-┃◈┃• 🍃 leaf
-┃◈┃• 🌌 galaxy
-┃◈┃• 💀 sans
-┃◈┃• 💥 boom
-┃◈┃• 💻 hacker
-┃◈┃• 😈 devilwings
-┃◈┃• 🇳🇬 nigeria
-┃◈┃• 💡 bulb
-┃◈┃• 👼 angelwings
-┃◈┃• ♈ zodiac
-┃◈┃• 💎 luxury
-┃◈┃• 🎨 paint
-┃◈┃• ❄️ frozen
-┃◈┃• 🏰 castle
-┃◈┃• 🖋️ tatoo
-┃◈┃• 🔫 valorant
-┃◈┃• 🐻 bear
-┃◈┃• 🔠 typography
-┃◈┃• 🎂 birthday
-╰────────────────────●●►
-
-
-> *© Pᴏᴡᴇʀᴇᴅ Bʏ 𒁂𓄂❥.𝑺𝑯𝑬𝑰𝑲𝑯 𝑨𝑳𝑰 🔥༽༼࿐ ♡••²⁴⁰²*`);
-                        
-                        
-                        break;
-                    default:
-                        reply("Invalid option. Please select a valid option🔴");
-                }
-
-            }
-        });
-
-    } catch (e) {
-        console.error(e);
-        await conn.sendMessage(from, { react: { text: '❌', key: mek.key } })
-        reply('An error occurred while processing your request.');
-    }
+  await conn.sendMessage(from, {
+    image: { url: "https://i.ibb.co/YdSKMhv/6767.jpg" },
+    caption,
+    buttons: [
+      { buttonId: 'menu_list', buttonText: { displayText: "📋 MENU" }, type: 1 }
+    ],
+    headerType: 4
+  }, { quoted: m });
 });
+
+// 📂 List Trigger Command (opens the list message)
+cmd({
+  pattern: "menu_list",
+  hidden: true
+}, async (conn, m) => {
+  await conn.sendMessage(m.chat, {
+    text: "*✨ Select a menu below:*",
+    buttonText: "📋 SELECT MENU",
+    sections: [{
+      title: "📚 SHEIKH ALI MENU",
+      rows: [
+        { title: "📥 Download Menu", rowId: "menu1" },
+        { title: "🤖 AI Menu", rowId: "menu2" },
+        { title: "🖼️ Anime Menu", rowId: "menu3" },
+        { title: "🔁 Convert Menu", rowId: "menu4" },
+        { title: "🎮 Fun Menu", rowId: "menu5" },
+        { title: "🏠 Main Menu", rowId: "menu6" },
+        { title: "👥 Group Menu", rowId: "menu7" },
+        { title: "👑 Owner Menu", rowId: "menu8" },
+        { title: "🛠 Other Menu", rowId: "menu9" },
+        { title: "❤️ Reactions", rowId: "menu10" },
+        { title: "🚨 Scammer Menu", rowId: "menu11" },
+        { title: "🖋 Logo Menu", rowId: "menu12" }
+      ]
+    }]
+  }, { quoted: m });
+});
+
+// 🧩 All 12 Submenu Handlers (cmd-based)
+
+cmd({ pattern: "menu1", hidden: true }, async (conn, m) =>
+  await conn.sendMessage(m.chat, { text: "*📥 Download Menu*\n• facebook\n• ytmp3\n• apk" }, { quoted: m })
+);
+
+cmd({ pattern: "menu2", hidden: true }, async (conn, m) =>
+  await conn.sendMessage(m.chat, { text: "*🤖 AI Menu*\n• gpt4\n• meta\n• ai" }, { quoted: m })
+);
+
+cmd({ pattern: "menu3", hidden: true }, async (conn, m) =>
+  await conn.sendMessage(m.chat, { text: "*🖼️ Anime Menu*\n• waifu\n• neko\n• animegirl" }, { quoted: m })
+);
+
+cmd({ pattern: "menu4", hidden: true }, async (conn, m) =>
+  await conn.sendMessage(m.chat, { text: "*🔁 Convert Menu*\n• sticker\n• tomp3\n• base64" }, { quoted: m })
+);
+
+cmd({ pattern: "menu5", hidden: true }, async (conn, m) =>
+  await conn.sendMessage(m.chat, { text: "*🎮 Fun Menu*\n• joke\n• hug\n• ship" }, { quoted: m })
+);
+
+cmd({ pattern: "menu6", hidden: true }, async (conn, m) =>
+  await conn.sendMessage(m.chat, { text: "*🏠 Main Menu*\n• ping\n• alive\n• help" }, { quoted: m })
+);
+
+cmd({ pattern: "menu7", hidden: true }, async (conn, m) =>
+  await conn.sendMessage(m.chat, { text: "*👥 Group Menu*\n• add\n• kick\n• promote" }, { quoted: m })
+);
+
+cmd({ pattern: "menu8", hidden: true }, async (conn, m) =>
+  await conn.sendMessage(m.chat, { text: "*👑 Owner Menu*\n• block\n• unblock\n• setpp" }, { quoted: m })
+);
+
+cmd({ pattern: "menu9", hidden: true }, async (conn, m) =>
+  await conn.sendMessage(m.chat, { text: "*🛠 Other Menu*\n• weather\n• timer\n• calc" }, { quoted: m })
+);
+
+cmd({ pattern: "menu10", hidden: true }, async (conn, m) =>
+  await conn.sendMessage(m.chat, { text: "*❤️ Reactions*\n• hug\n• slap\n• kiss" }, { quoted: m })
+);
+
+cmd({ pattern: "menu11", hidden: true }, async (conn, m) =>
+  await conn.sendMessage(m.chat, { text: "*🚨 Scammer Menu*\nReport fake numbers:" }, { quoted: m })
+);
+
+cmd({ pattern: "menu12", hidden: true }, async (conn, m) =>
+  await conn.sendMessage(m.chat, { text: "*🖋 Logo Menu*\n• neonlight\n• galaxy\n• sadgirl" }, { quoted: m })
+);
