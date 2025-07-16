@@ -74,51 +74,55 @@ cmd({
 });
 
 // 🧩 All 12 Submenu Handlers (cmd-based)
-
 cmd({ pattern: "menu1", hidden: true }, async (conn, m) =>
   await conn.sendMessage(m.chat, { text: "*📥 Download Menu*\n• facebook\n• ytmp3\n• apk" }, { quoted: m })
 );
-
 cmd({ pattern: "menu2", hidden: true }, async (conn, m) =>
   await conn.sendMessage(m.chat, { text: "*🤖 AI Menu*\n• gpt4\n• meta\n• ai" }, { quoted: m })
 );
-
 cmd({ pattern: "menu3", hidden: true }, async (conn, m) =>
   await conn.sendMessage(m.chat, { text: "*🖼️ Anime Menu*\n• waifu\n• neko\n• animegirl" }, { quoted: m })
 );
-
 cmd({ pattern: "menu4", hidden: true }, async (conn, m) =>
   await conn.sendMessage(m.chat, { text: "*🔁 Convert Menu*\n• sticker\n• tomp3\n• base64" }, { quoted: m })
 );
-
 cmd({ pattern: "menu5", hidden: true }, async (conn, m) =>
   await conn.sendMessage(m.chat, { text: "*🎮 Fun Menu*\n• joke\n• hug\n• ship" }, { quoted: m })
 );
-
 cmd({ pattern: "menu6", hidden: true }, async (conn, m) =>
   await conn.sendMessage(m.chat, { text: "*🏠 Main Menu*\n• ping\n• alive\n• help" }, { quoted: m })
 );
-
 cmd({ pattern: "menu7", hidden: true }, async (conn, m) =>
   await conn.sendMessage(m.chat, { text: "*👥 Group Menu*\n• add\n• kick\n• promote" }, { quoted: m })
 );
-
 cmd({ pattern: "menu8", hidden: true }, async (conn, m) =>
   await conn.sendMessage(m.chat, { text: "*👑 Owner Menu*\n• block\n• unblock\n• setpp" }, { quoted: m })
 );
-
 cmd({ pattern: "menu9", hidden: true }, async (conn, m) =>
   await conn.sendMessage(m.chat, { text: "*🛠 Other Menu*\n• weather\n• timer\n• calc" }, { quoted: m })
 );
-
 cmd({ pattern: "menu10", hidden: true }, async (conn, m) =>
   await conn.sendMessage(m.chat, { text: "*❤️ Reactions*\n• hug\n• slap\n• kiss" }, { quoted: m })
 );
-
 cmd({ pattern: "menu11", hidden: true }, async (conn, m) =>
   await conn.sendMessage(m.chat, { text: "*🚨 Scammer Menu*\nReport fake numbers:" }, { quoted: m })
 );
-
 cmd({ pattern: "menu12", hidden: true }, async (conn, m) =>
   await conn.sendMessage(m.chat, { text: "*🖋 Logo Menu*\n• neonlight\n• galaxy\n• sadgirl" }, { quoted: m })
 );
+
+// ❌ Error Handling for Wrong Reply (like "13", "abc", etc.)
+cmd({
+  pattern: "^[^a-zA-Z]*$",
+  hidden: true
+}, async (conn, m) => {
+  const reply = m.body?.trim();
+
+  // only react if it was a reply to menu list
+  const validNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+  if (!validNumbers.includes(reply)) {
+    await conn.sendMessage(m.chat, {
+      text: "❌ *Invalid option!*\nPlease type a number between 1 and 12 or tap the 📋 MENU button.",
+    }, { quoted: m });
+  }
+});
